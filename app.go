@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"sync"
+	"weaget/internal"
 )
 
 // App struct
@@ -22,6 +24,20 @@ func (a *App) startup(ctx context.Context) {
 }
 
 // Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+func (a *App) Greet(name string) {
+	ch := make(chan internal.CurrentWeather)
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		result, err := internal.GetCurrentWeather(37.6173, 55.7558)
+		if err != nil {
+			fmt.Println("Error getting weather:", err)
+			return
+		}
+		ch <- result
+	}()
+	result := <-ch
+	fmt.Println("Current Weather:", result)
+	wg.Wait()
 }
