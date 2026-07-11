@@ -23,8 +23,8 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) {
+// Updates current weather information and prints it to the console
+func (a *App) UpdateWeather(name string) {
 	ch := make(chan internal.CurrentWeather)
 	var wg sync.WaitGroup
 	wg.Add(1)
