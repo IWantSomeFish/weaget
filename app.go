@@ -10,6 +10,7 @@ import (
 // App struct
 type App struct {
 	ctx context.Context
+	cfg internal.Config
 }
 
 // NewApp creates a new App application struct
@@ -21,6 +22,7 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	a.cfg, _ = internal.LoadConfig()
 }
 
 // Updates current weather information and prints it to the console

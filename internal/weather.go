@@ -14,11 +14,12 @@ type CurrentWeather struct {
 	Temperature float64 `json:"temperature_2m"`
 	Humidity    float64 `json:"relative_humidity_2m"`
 	WeatherCode int     `json:"weather_code"`
+	IsDay       int     `json:"is_day"`
 	UpdateTime  string  `json:"time"`
 }
 
 func GetCurrentWeather(longitude float64, latitude float64) (CurrentWeather, error) {
-	response, err := http.Get(fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%f&longitude=%f&current=temperature_2m,relative_humidity_2m,weather_code", latitude, longitude))
+	response, err := http.Get(fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%f&longitude=%f&current=temperature_2m,relative_humidity_2m,weather_code,is_day&timezone=GMT&wind_speed_unit=ms&temperature_unit=fahrenheit", latitude, longitude))
 	if err != nil {
 		return CurrentWeather{}, err
 	}
