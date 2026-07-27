@@ -30,16 +30,19 @@ func (a *App) UpdateWeather(name string) {
 	ch := make(chan internal.CurrentWeather)
 	var wg sync.WaitGroup
 	wg.Add(1)
+
 	go func() {
 		defer wg.Done()
-		result, err := internal.GetCurrentWeather(37.6173, 55.7558)
+		result, err := internal.GetCurrentWeather(a.cfg)
 		if err != nil {
 			fmt.Println("Error getting weather:", err)
 			return
 		}
 		ch <- result
 	}()
+
 	result := <-ch
+	fmt.Println("Current config:", a.cfg)
 	fmt.Println("Current Weather:", result)
 	wg.Wait()
 }

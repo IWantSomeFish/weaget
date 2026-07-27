@@ -6,13 +6,26 @@ import (
 )
 
 type Config struct {
-	latitude         float64
-	longitude        float64
-	speed_unit       string
-	temperature_unit string
+	Name             string  `json:"name"`
+	Latitude         float64 `json:"latitude"`
+	Longitude        float64 `json:"longitude"`
+	Speed_unit       string  `json:"speed_unit"`
+	Temperature_unit string  `json:"temperature_unit"`
 }
 
 func LoadConfig() (Config, error) {
+	if _, err := os.Stat("config.json"); os.IsNotExist(err) {
+		defaultConfig := Config{
+			Name:             "London",
+			Latitude:         51.50,
+			Longitude:        -0.12,
+			Speed_unit:       "ms",
+			Temperature_unit: "fahrenheit",
+		}
+		SaveConfig(defaultConfig)
+		return defaultConfig, nil
+	}
+
 	file, err := os.Open("config.json")
 	if err != nil {
 		return Config{}, err
@@ -34,7 +47,11 @@ func SaveConfig(cfg Config) error {
 		return err
 	}
 	defer file.Close()
-	err = json.NewEncoder(file).Encode(cfg)
+	bytes, err := json.MarshalIndent(cfg, "", "  ")
+	if err != nil {
+		return err
+	}
+	_, err = file.Write(bytes)
 	if err != nil {
 		return err
 	}

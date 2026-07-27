@@ -18,8 +18,8 @@ type CurrentWeather struct {
 	UpdateTime  string  `json:"time"`
 }
 
-func GetCurrentWeather(longitude float64, latitude float64) (CurrentWeather, error) {
-	response, err := http.Get(fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%f&longitude=%f&current=temperature_2m,relative_humidity_2m,weather_code,is_day&timezone=GMT&wind_speed_unit=ms&temperature_unit=fahrenheit", latitude, longitude))
+func GetCurrentWeather(config Config) (CurrentWeather, error) {
+	response, err := http.Get(fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%f&longitude=%f&current=temperature_2m,relative_humidity_2m,weather_code,is_day&timezone=GMT&wind_speed_unit=ms&temperature_unit=fahrenheit", config.Latitude, config.Longitude))
 	if err != nil {
 		return CurrentWeather{}, err
 	}
