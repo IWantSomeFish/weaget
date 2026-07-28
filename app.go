@@ -26,7 +26,7 @@ func (a *App) startup(ctx context.Context) {
 }
 
 // Updates current weather information and prints it to the console
-func (a *App) UpdateWeather(name string) {
+func (a *App) UpdateWeather() internal.CurrentWeather {
 	ch := make(chan internal.CurrentWeather)
 	var wg sync.WaitGroup
 	wg.Add(1)
@@ -45,4 +45,15 @@ func (a *App) UpdateWeather(name string) {
 	fmt.Println("Current config:", a.cfg)
 	fmt.Println("Current Weather:", result)
 	wg.Wait()
+	return result
+}
+
+func (a *App) GetLocationName() string {
+	data, err := internal.GetNameByCords(a.cfg.Latitude, a.cfg.Longitude)
+	if err != nil {
+		fmt.Println("Error getting location name:", err)
+		return ""
+	}
+	a.cfg.Name = data.Address.City
+	return data.Address.City
 }
