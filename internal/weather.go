@@ -30,7 +30,19 @@ type ReverseResponse struct {
 }
 
 func GetCurrentWeather(config Config) (CurrentWeather, error) {
-	response, err := http.Get(fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%f&longitude=%f&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,is_day&timezone=GMT&wind_speed_unit=ms&temperature_unit=fahrenheit", config.Latitude, config.Longitude))
+	url := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%f&longitude=%f&current=wind_speed_10m,temperature_2m,relative_humidity_2m,weather_code,is_day", config.Latitude, config.Longitude)
+	if config.Temperature_unit {
+		url += "&temperature_unit=fahrenheit"
+	}
+	switch config.Speed_unit {
+	case "ms":
+		url += "&wind_speed_unit=ms"
+	case "kmh":
+		url += ""
+	case "mph":
+		url += "&wind_speed_unit=mph"
+	}
+	response, err := http.Get(url)
 	if err != nil {
 		return CurrentWeather{}, err
 	}

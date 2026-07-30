@@ -1,14 +1,15 @@
 import {useEffect, useState} from 'react';
 import menu from './assets/images/menu.svg';
 import './App.css';
-import {GetLocationName, UpdateWeather} from "../wailsjs/go/main/App";
+import {GetLocationName, GetTemperatureUnit, UpdateWeather} from "../wailsjs/go/main/App";
 import { internal } from '../wailsjs/go/models';
+import { getWeatherIcon } from './helpers/weatherIcon.helper';
 
 function App() {
 
     async function fetchWeather() {
-        const result: internal.CurrentWeather = await UpdateWeather();
-        setWeather(result);
+        const weather: internal.CurrentWeather = await UpdateWeather();
+        setWeather(weather);
     }
     
     async function getNameByCords(): Promise<string> {
@@ -17,22 +18,38 @@ function App() {
         setCityName(result);
         return result;
     }
-    useEffect(() => { fetchWeather();}, []);
-    
+
+    async function fetchTemperatureUnit() {
+        const unit: boolean = await GetTemperatureUnit();
+        setTemperatureUnit(unit);
+    }
     const [weather, setWeather] = useState<internal.CurrentWeather | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [cityName, setCityName] = useState<string>('');
+    const [WeatherIcon, setWeatherIcon] = useState<string>('');
+    const [temperatureUnit, setTemperatureUnit] = useState<boolean>(false);
 
+    useEffect(() => { fetchWeather();}, []);
+    useEffect(() => {getNameByCords().then(name => setCityName(name)).catch(() => setCityName(''))}, []);
+    useEffect(() => {
+        if (weather) {
+            const icon = getWeatherIcon(weather.weather_code, Boolean(weather.is_day));
+            setWeatherIcon(icon);
+        }
+    }, [weather]);
+    useEffect(() => {fetchTemperatureUnit();}, [weather]);
 
     function toggleSidebar() {
         console.log("toggling sidebar");
         setSidebarOpen(!sidebarOpen);
     }
 
-    useEffect(() => {
-        // load city name asynchronously
-        getNameByCords().then(name => setCityName(name)).catch(() => setCityName(''));
-    }, []);
+    function updateWeather() {
+        fetchWeather();
+        fetchTemperatureUnit();
+        getNameByCords();
+        if (weather) setWeatherIcon(getWeatherIcon(weather.weather_code, Boolean(weather.is_day)));
+    }
 
     return (
         <div id="app" className="app">
@@ -53,12 +70,13 @@ function App() {
             <div id="input" className="input-box">
                 {weather && (
                     <div>
+                        <img src={WeatherIcon} alt="Weather Icon" style={{width: '120px', height: '100px'}}/>
                         <p>Weather in {cityName || '...'}</p>
                         <p>Humidity: {weather.relative_humidity_2m}%</p>
-                        <p>Temperature: {weather.temperature_2m}°C</p>
+                        <p>Temperature: {weather.temperature_2m} {temperatureUnit ? '°F' : '°C'}</p>
                     </div>
                 )}
-                <button className="btn" onClick={fetchWeather}>Update Weather</button>
+                <button className="btn" onClick={updateWeather}>Update Weather</button>
             </div>
         </div>
     )

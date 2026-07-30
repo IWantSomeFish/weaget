@@ -10,7 +10,7 @@ type Config struct {
 	Latitude         float64 `json:"latitude"`
 	Longitude        float64 `json:"longitude"`
 	Speed_unit       string  `json:"speed_unit"`
-	Temperature_unit string  `json:"temperature_unit"`
+	Temperature_unit bool    `json:"temperature_unit"`
 }
 
 func LoadConfig() (Config, error) {
@@ -20,7 +20,7 @@ func LoadConfig() (Config, error) {
 			Latitude:         51.50,
 			Longitude:        -0.12,
 			Speed_unit:       "ms",
-			Temperature_unit: "fahrenheit",
+			Temperature_unit: true,
 		}
 		SaveConfig(defaultConfig)
 		return defaultConfig, nil
