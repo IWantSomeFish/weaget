@@ -58,6 +58,7 @@ func (a *App) GetLocationName() string {
 	return data.Address.City
 }
 
-func (a *App) GetTemperatureUnit() bool {
-	return a.cfg.Temperature_unit
+func (a *App) UpdateConfig() internal.Config {
+	a.cfg, _ = internal.LoadConfig()
+	return a.cfg
 }

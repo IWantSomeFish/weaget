@@ -53,7 +53,7 @@
     
 .sidebar-menu {
     position: absolute;
-    background-color: rgba(231, 229, 236, 0.7);
+    background-color: rgba(35, 14, 88, 1);
     top: 0;
     left: 0;
     height: 100%;
@@ -65,9 +65,17 @@
 
 .sidebar-menu.open {
     transform: translateX(0);
-    background-color: rgba(231, 229, 236, 0.7);
+    background-color: rgba(35, 14, 88, 1);
     transition: transform .25s ease;
     overflow: hidden;
+}
+
+.sidebar-menu .content {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .sidebar .overlay {

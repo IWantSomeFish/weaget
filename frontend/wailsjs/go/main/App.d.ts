@@ -4,6 +4,6 @@ import {internal} from '../models';
 
 export function GetLocationName():Promise<string>;
 
-export function GetTemperatureUnit():Promise<boolean>;
+export function UpdateConfig():Promise<internal.Config>;
 
 export function UpdateWeather():Promise<internal.CurrentWeather>;

@@ -6,8 +6,8 @@ export function GetLocationName() {
   return window['go']['main']['App']['GetLocationName']();
 }
 
-export function GetTemperatureUnit() {
-  return window['go']['main']['App']['GetTemperatureUnit']();
+export function UpdateConfig() {
+  return window['go']['main']['App']['UpdateConfig']();
 }
 
 export function UpdateWeather() {

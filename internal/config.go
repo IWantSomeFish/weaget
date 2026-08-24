@@ -15,8 +15,9 @@ type Config struct {
 
 func LoadConfig() (Config, error) {
 	if _, err := os.Stat("config.json"); os.IsNotExist(err) {
+		name, _ := GetNameByCords(51.50, -0.12)
 		defaultConfig := Config{
-			Name:             "London",
+			Name:             name.Address.City,
 			Latitude:         51.50,
 			Longitude:        -0.12,
 			Speed_unit:       "ms",
@@ -26,14 +27,13 @@ func LoadConfig() (Config, error) {
 		return defaultConfig, nil
 	}
 
-	file, err := os.Open("config.json")
+	file, err := os.ReadFile("config.json")
 	if err != nil {
 		return Config{}, err
 	}
-	defer file.Close()
 
 	var cfg Config
-	err = json.NewDecoder(file).Decode(&cfg)
+	err = json.Unmarshal(file, &cfg)
 	if err != nil {
 		return Config{}, err
 	}

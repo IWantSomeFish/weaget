@@ -1,5 +1,25 @@
 export namespace internal {
 	
+	export class Config {
+	    name: string;
+	    latitude: number;
+	    longitude: number;
+	    speed_unit: string;
+	    temperature_unit: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new Config(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.latitude = source["latitude"];
+	        this.longitude = source["longitude"];
+	        this.speed_unit = source["speed_unit"];
+	        this.temperature_unit = source["temperature_unit"];
+	    }
+	}
 	export class CurrentWeather {
 	    temperature_2m: number;
 	    relative_humidity_2m: number;
