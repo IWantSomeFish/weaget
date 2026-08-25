@@ -1,22 +1,16 @@
 import {useEffect, useState} from 'react';
 import menu from './assets/images/menu.svg';
 import './App.css';
-import {GetLocationName, UpdateConfig, UpdateWeather} from "../wailsjs/go/main/App";
+import {UpdateConfig, UpdateWeather} from "../wailsjs/go/main/App";
 import { internal } from '../wailsjs/go/models';
 import { getWeatherIcon } from './helpers/weatherIcon.helper';
+import './helpers/weatherIcons.css';
 
 function App() {
 
     async function fetchWeather() {
         const weather: internal.CurrentWeather = await UpdateWeather();
         setWeather(weather);
-    }
-    
-    async function getNameByCords(): Promise<string> {
-        // In browser environment, read config from public/config.json via HTTP
-        const result: string = await GetLocationName();
-        setCityName(result);
-        return result;
     }
 
     async function fetchConfig() {
@@ -27,18 +21,16 @@ function App() {
     async function saveConfig() {
         fetchConfig()
     }
-    const [weather, setWeather] = useState<internal.CurrentWeather | null>(null);
+    const [weather, setWeather] = useState<internal.CurrentWeather>(new internal.CurrentWeather);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [cityName, setCityName] = useState<string>('');
     const [tempratureUnit, setTempUnit] = useState<boolean>(false);
     const [WeatherIcon, setWeatherIcon] = useState<string>('');
-    const [config, setConfig] = useState<internal.Config | null>(null);
+    const [config, setConfig] = useState<internal.Config>(new internal.Config);
 
     useEffect(() => { 
         async function initialize() {
             fetchConfig();
             fetchWeather();
-            getNameByCords().then(name => setCityName(name)).catch(() => setCityName(''))
         }
         initialize();
     }, []);
@@ -57,7 +49,6 @@ function App() {
 
     function updateWeather() {
         fetchWeather();
-        getNameByCords();
         if (weather) setWeatherIcon(getWeatherIcon(weather.weather_code, Boolean(weather.is_day)));
     }
 
@@ -71,22 +62,28 @@ function App() {
                 </div>
                 <div id="sidebar-menu" className={`sidebar-menu ${sidebarOpen ? 'open' : ''}`}>
                     <div className='content'>
-                        <h3>Settings</h3>
-                        <input></input>
+                        <text>Settings</text>
+                        <text>Latitude</text>
+                        <input id="latitude" className="input" defaultValue={config.latitude}></input>
+                        <text>Longitude</text>
+                        <input id="longitude" defaultValue={config.longitude}></input>
                         <button onClick={saveConfig}>Save settings</button>
                     </div>
                 </div>
                 <div className={`overlay ${sidebarOpen ? 'open' : ''}`} onClick={toggleSidebar}></div>
             </div>
             <div id="input" className="input-box">
-                {weather && (
                     <div>
-                        <img src={WeatherIcon} alt="Weather Icon" style={{width: '120px', height: '100px'}}/>
-                        <p>Weather in {cityName || '...'}</p>
+                        <div
+                            role="img"
+                            aria-label="Weather icon"
+                            className={`weather-icon weather-icon--code-${weather.weather_code} ${weather.is_day ? 'is-day' : 'is-night'}`}
+                            dangerouslySetInnerHTML={{__html: WeatherIcon}}
+                        />
+                        <p>Weather in {config.name || '...'}</p>
                         <p>Humidity: {weather.relative_humidity_2m}%</p>
                         <p>Temperature: {weather.temperature_2m} {tempratureUnit ? '°F' : '°C'}</p>
                     </div>
-                )}
                 <button className="btn" onClick={updateWeather}>Update Weather</button>
             </div>
         </div>

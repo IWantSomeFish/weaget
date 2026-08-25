@@ -1,0 +1,116 @@
+/* Shared presentation for all weather SVG assets. */
+.weather-icon {
+    display: block;
+    width: 120px;
+    height: 100px;
+    object-fit: contain;
+    color: #7b8494;
+    user-select: none;
+}
+
+/*
+ * These selectors are used when an icon is rendered inline as SVG.
+ * Asset SVGs use currentColor, so no colour palette is defined here.
+ */
+.weather-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.weather-icon .weather-sun-core,
+.weather-icon .weather-moon-crescent,
+.weather-icon .weather-stars,
+.weather-icon .weather-cloud-shadow,
+.weather-icon .weather-drizzle,
+.weather-icon .weather-cloud,
+.weather-icon .weather-sun {
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+.weather-icon .weather-sun-rays,
+.weather-icon .weather-drizzle {
+    fill: none;
+    stroke: currentColor;
+}
+
+.weather-icon .weather-cloud-highlight {
+    fill: currentColor;
+    opacity: 0.55;
+}
+
+/* Clear sky */
+.weather-icon--code-0.is-day { color: #f7c948; }
+.weather-icon--code-0.is-night { color: #d9ddf2; }
+
+/* Rewritten cloudy and drizzle icons keep semantic SVG classes. */
+.weather-icon.is-day .weather-sun-core,
+.weather-icon.is-day .weather-sun-rays {
+    color: #f7c948;
+    fill: #f7c948;
+    stroke: #f7c948;
+}
+
+.weather-icon .weather-moon-crescent,
+.weather-icon .weather-stars { fill: #d9ddf2; }
+.weather-icon .weather-cloud-shadow { fill: #657080; }
+.weather-icon .weather-cloud-highlight { fill: #adb7c6; }
+.weather-icon .weather-drizzle { stroke: #4e9eea; }
+
+/* Day icons built from: sun, rays, cloud, then precipitation. */
+:is(.weather-icon--code-45, .weather-icon--code-48, .weather-icon--code-61, .weather-icon--code-63, .weather-icon--code-65, .weather-icon--code-66, .weather-icon--code-67, .weather-icon--code-77).is-day svg > g > circle,
+:is(.weather-icon--code-45, .weather-icon--code-48, .weather-icon--code-61, .weather-icon--code-63, .weather-icon--code-65, .weather-icon--code-66, .weather-icon--code-67, .weather-icon--code-77).is-day svg > g > path:nth-of-type(1) {
+    color: #f7c948;
+    fill: #f7c948;
+    stroke: #f7c948;
+}
+
+:is(.weather-icon--code-45, .weather-icon--code-48, .weather-icon--code-61, .weather-icon--code-63, .weather-icon--code-65, .weather-icon--code-66, .weather-icon--code-67, .weather-icon--code-77).is-day svg > g > path:nth-of-type(2),
+:is(.weather-icon--code-71, .weather-icon--code-73, .weather-icon--code-75, .weather-icon--code-80, .weather-icon--code-81, .weather-icon--code-82, .weather-icon--code-85, .weather-icon--code-86, .weather-icon--code-95, .weather-icon--code-96, .weather-icon--code-99) svg > g > path:first-of-type {
+    color: #657080;
+    fill: #657080;
+    stroke: #657080;
+}
+
+/* Rain and sleet use the final path; snow uses the second path. */
+:is(.weather-icon--code-61, .weather-icon--code-63, .weather-icon--code-65, .weather-icon--code-66, .weather-icon--code-67).is-day svg > g > path:nth-of-type(3),
+:is(.weather-icon--code-61, .weather-icon--code-63, .weather-icon--code-65, .weather-icon--code-66, .weather-icon--code-67).is-night svg > g > path:nth-of-type(3),
+:is(.weather-icon--code-80, .weather-icon--code-81, .weather-icon--code-82) svg > g > path:nth-of-type(2) {
+    color: #4e9eea;
+    stroke: #4e9eea;
+}
+
+:is(.weather-icon--code-71, .weather-icon--code-73, .weather-icon--code-75, .weather-icon--code-85, .weather-icon--code-86) svg > g > path:nth-of-type(2),
+:is(.weather-icon--code-48, .weather-icon--code-77).is-day svg > g > path:nth-of-type(3),
+:is(.weather-icon--code-48, .weather-icon--code-77).is-night svg > g > path:nth-of-type(3),
+:is(.weather-icon--code-77) svg > g > circle:not(:first-child) {
+    color: #8ed0f4;
+    fill: #8ed0f4;
+    stroke: #8ed0f4;
+}
+
+/* Night icon layout: moon, cloud, precipitation. */
+:is(.weather-icon--code-45, .weather-icon--code-48, .weather-icon--code-61, .weather-icon--code-63, .weather-icon--code-65, .weather-icon--code-66, .weather-icon--code-67, .weather-icon--code-77).is-night svg > g > path:first-of-type {
+    color: #d9ddf2;
+    fill: #d9ddf2;
+}
+
+:is(.weather-icon--code-45, .weather-icon--code-48, .weather-icon--code-61, .weather-icon--code-63, .weather-icon--code-65, .weather-icon--code-66, .weather-icon--code-67, .weather-icon--code-77).is-night svg > g > path:nth-of-type(2) {
+    color: #657080;
+    fill: #657080;
+    stroke: #657080;
+}
+
+/* Dense cloud cover, fog and lightning remain deliberately darker. */
+.weather-icon--code-3 { color: #596474; }
+:is(.weather-icon--code-45, .weather-icon--code-48) svg > g > path:last-of-type { color: #aeb8c6; stroke: #aeb8c6; }
+:is(.weather-icon--code-95, .weather-icon--code-96, .weather-icon--code-99) svg > g > path:nth-of-type(2) { color: #f7c948; fill: #f7c948; }
+
+@media (prefers-reduced-motion: reduce) {
+    .weather-icon,
+    .weather-icon * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

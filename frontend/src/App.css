@@ -71,11 +71,17 @@
 }
 
 .sidebar-menu .content {
-    padding-left: 10px;
+    padding-left: 20px;
     padding-right: 10px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.sidebar-menu .content .input{
+    background-color: rgb(130, 119, 158);
+    border: none;
+    color: white;
 }
 
 .sidebar .overlay {
