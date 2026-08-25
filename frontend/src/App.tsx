@@ -42,6 +42,7 @@ function App() {
     }
     const [weather, setWeather] = useState<internal.CurrentWeather>(new internal.CurrentWeather);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [windowPinned, setWindowPinned] = useState(false);
     const [tempratureUnit, setTempUnit] = useState<boolean>(false);
     const [WeatherIcon, setWeatherIcon] = useState<string>('');
     const [config, setConfig] = useState<internal.Config>(new internal.Config);
@@ -68,6 +69,10 @@ function App() {
         setSidebarOpen(!sidebarOpen);
     }
 
+    function toggleWindowPinned() {
+        setWindowPinned(!windowPinned);
+    }
+
     function updateWeather() {
         fetchWeather();
         if (weather) setWeatherIcon(getWeatherIcon(weather.weather_code, Boolean(weather.is_day)));
@@ -75,11 +80,21 @@ function App() {
 
     return (
         <div id="app" className="app">
-            <header className="titlebar">
+            <header className={`titlebar ${windowPinned ? 'titlebar--pinned' : ''}`}>
                 <span className="titlebar__name">Weaget</span>
                 <div className="titlebar__actions">
                     <button className="titlebar__update" type="button" onClick={updateWeather}>Update</button>
                     <div className="titlebar__controls">
+                    <button
+                        className={`titlebar__button titlebar__pin ${windowPinned ? 'titlebar__pin--active' : ''}`}
+                        type="button"
+                        onClick={toggleWindowPinned}
+                        aria-label={windowPinned ? 'Unpin window' : 'Pin window'}
+                        aria-pressed={windowPinned}
+                        title={windowPinned ? 'Unpin window' : 'Pin window'}
+                    >
+                        📌
+                    </button>
                     <button className="titlebar__button" type="button" onClick={WindowMinimise} aria-label="Minimise window">−</button>
                     <button className="titlebar__button titlebar__button--close" type="button" onClick={Quit} aria-label="Close window">×</button>
                     </div>
