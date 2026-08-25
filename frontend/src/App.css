@@ -1,104 +1,352 @@
+:root {
+    --blue-900: #29415e;
+    --blue-700: #47779e;
+    --blue-500: #72add6;
+    --blue-100: #d8efff;
+    --blue-50: #f5fbff;
+    --yellow-500: #f3c85b;
+    --yellow-300: #ffe49a;
+    --yellow-100: #fff6d4;
+    --surface: rgba(255, 255, 255, 0.76);
+    --border: rgba(114, 173, 214, 0.42);
+    --shadow: 0 16px 42px rgba(71, 119, 158, 0.18);
+}
+
 .app {
     display: flex;
-    flex-direction: row;
-    height: 100vh;
-    width: 100vw
+    min-height: 100vh;
+    width: 100%;
+    padding-top: 40px;
 }
 
-.input-box .btn {
-    cursor: pointer;
-}
-
-.input-box .btn:hover {
-    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
-    color: #333333;
-}
-
-.input-box .input {
-    border: none;
-    border-radius: 3px;
-    outline: none;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 10px;
-    background-color: rgba(240, 240, 240, 1);
-    -webkit-font-smoothing: antialiased;
-}
-
-.input-box .input:hover {
-    border: none;
-    background-color: rgba(255, 255, 255, 1);
-}
-
-.input-box .input:focus {
-    border: none;
-    background-color: rgba(255, 255, 255, 1);
-}
-
-.sidebar .column {
-    width: 60px;
-    height: 100%;
-    background-color: rgba(194, 172, 255, 1);
-    display: flex;
-    flex-direction: column;
-    align-items: normal;
-}
-
-.sidebar .btn {
-    background-color: rgba(194, 172, 255, 0);
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-}
-    
-.sidebar-menu {
-    position: absolute;
-    background-color: rgba(35, 14, 88, 1);
+.titlebar {
+    position: fixed;
+    z-index: 20;
     top: 0;
+    right: 0;
     left: 0;
-    height: 100%;
-
-    transform: translateX(-200%);
-    transition: transform .25s ease;
-    z-index: 10;
-}
-
-.sidebar-menu.open {
-    transform: translateX(0);
-    background-color: rgba(35, 14, 88, 1);
-    transition: transform .25s ease;
-    overflow: hidden;
-}
-
-.sidebar-menu .content {
-    padding-left: 20px;
-    padding-right: 10px;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    height: 40px;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 18px;
+    background: rgba(255, 246, 212, .92);
+    border-bottom: 1px solid var(--border);
+    color: var(--blue-900);
+    box-shadow: 0 2px 10px rgba(71, 119, 158, .08);
+    user-select: none;
+    -webkit-app-region: drag;
+    --wails-draggable: drag;
 }
 
-.sidebar-menu .content .input{
-    background-color: rgb(130, 119, 158);
-    border: none;
+.titlebar__name {
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+}
+
+.titlebar__actions,
+.titlebar__controls {
+    display: flex;
+    align-self: stretch;
+    -webkit-app-region: no-drag;
+    --wails-draggable: no-drag;
+}
+
+.titlebar__update {
+    margin: 6px 8px 6px 0;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--yellow-500);
+    color: var(--blue-900);
+    cursor: pointer;
+    font-size: .78rem;
+    font-weight: 800;
+    transition: background-color .16s ease, transform .16s ease;
+}
+
+.titlebar__update:hover {
+    background: #ffd96f;
+    transform: translateY(-1px);
+}
+
+.titlebar__update:focus-visible {
+    outline: 3px solid rgba(114, 173, 214, .55);
+    outline-offset: 1px;
+}
+
+.titlebar__button {
+    width: 46px;
+    border: 0;
+    background: transparent;
+    color: var(--blue-700);
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: background-color .16s ease, color .16s ease;
+}
+
+.titlebar__button:hover { background: var(--blue-100); }
+
+.titlebar__button--close:hover {
+    background: #ef7f78;
     color: white;
 }
 
-.sidebar .overlay {
-    position: absolute;
-    top: 0;
+.titlebar__button:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 3px solid rgba(114, 173, 214, .55);
+    outline-offset: -3px;
+}
+
+.sidebar .column {
+    display: flex;
+    width: 68px;
+    min-height: calc(100vh - 40px);
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 18px;
+    background: rgba(255, 246, 212, 0.8);
+    border-right: 1px solid var(--border);
+    box-shadow: 4px 0 18px rgba(71, 119, 158, 0.08);
+}
+
+.sidebar .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--blue-900);
+    cursor: pointer;
+    padding: 10px;
+    transition: background-color .2s ease, transform .2s ease;
+}
+
+.sidebar .btn:hover {
+    background: var(--yellow-300);
+    transform: translateY(-1px);
+}
+
+.sidebar .btn:focus-visible,
+.input-box .btn:focus-visible,
+.sidebar-menu input:focus-visible,
+.sidebar-menu select:focus-visible {
+    outline: 3px solid rgba(114, 173, 214, .45);
+    outline-offset: 2px;
+}
+
+.sidebar-menu {
+    position: fixed;
+    z-index: 10;
+    top: 40px;
     left: 0;
-    width: 100%;
+    width: min(330px, calc(100vw - 24px));
+    height: calc(100% - 40px);
+    padding: 12px;
+    background: var(--blue-50);
+    border-right: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transform: translateX(-105%);
+    transition: transform .25s ease;
+}
+
+.sidebar-menu.open { transform: translateX(0); }
+
+.sidebar-menu .content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
+    padding: 12px;
+}
+
+.sidebar-menu .content h2 {
+    margin: 0 0 2px;
+    color: var(--blue-900);
+    font-size: 1.1rem;
+    line-height: 1.15;
+}
+
+.sidebar-menu .content label {
+    color: var(--blue-700);
+    font-size: .82rem;
+    font-weight: 700;
+}
+
+.sidebar-menu .content .input {
+    width: 100%;
+    height: 32px;
+    padding: 0 11px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--blue-900);
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.sidebar-menu .content .input:hover,
+.sidebar-menu .content .input:focus {
+    border-color: var(--blue-500);
+    box-shadow: 0 0 0 3px rgba(114, 173, 214, .16);
+}
+
+.sidebar-menu .content select.input { cursor: pointer; }
+
+.sidebar-menu .content .btn,
+.input-box .btn {
+    justify-content: center;
+    margin-top: 10px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 11px;
+    background: var(--yellow-500);
+    color: var(--blue-900);
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 12px rgba(243, 200, 91, .35);
+    transition: background-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.sidebar-menu .content .btn {
+    margin-top: 2px;
+    padding: 7px 12px;
+}
+
+.sidebar-menu .content .btn:hover,
+.input-box .btn:hover {
+    background: #ffd96f;
+    box-shadow: 0 7px 16px rgba(243, 200, 91, .46);
+    transform: translateY(-1px);
+}
+
+.config-error {
+    margin: 3px 0;
+    color: #b34c54;
+    font-size: .85rem;
+}
+
+.sidebar .overlay {
+    position: fixed;
     z-index: 5;
+    inset: 0;
+    background: rgba(41, 65, 94, .18);
+    backdrop-filter: blur(2px);
     opacity: 0;
-    transition: opacity 0.3s ease;
     pointer-events: none;
+    transition: opacity .25s ease;
 }
 
 .sidebar .overlay.open {
     opacity: 1;
     pointer-events: auto;
+}
+
+.input-box {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.weather-card {
+    width: min(100%, 430px);
+    padding: 8px;
+}
+
+.weather-card__location {
+    margin: 0 0 4px;
+    color: var(--blue-700);
+    font-size: .92rem;
+    font-weight: 800;
+}
+
+.weather-card__overview {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(118px, 1fr);
+    gap: 10px;
+    align-items: center;
+    min-height: 86px;
+}
+
+.weather-card__temperature {
+    margin: 0;
+    color: var(--blue-900);
+    font-size: clamp(2.5rem, 10vw, 3.65rem);
+    font-weight: 800;
+    letter-spacing: -.06em;
+    line-height: 1;
+}
+
+.weather-card__temperature-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 82px;
+    align-items: center;
+    min-height: 76px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .8);
+    box-shadow: 0 8px 18px rgba(71, 119, 158, .12);
+}
+
+.weather-card__temperature-card .weather-card__location {
+    grid-column: 1 / -1;
+}
+
+.weather-card__temperature span {
+    margin-left: 5px;
+    color: var(--blue-500);
+    font-size: .42em;
+    letter-spacing: 0;
+    vertical-align: top;
+}
+
+.weather-card .weather-icon {
+    width: 82px;
+    height: 72px;
+    margin: -4px 0;
+}
+
+.weather-card__details {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .8);
+    box-shadow: 0 8px 18px rgba(71, 119, 158, .12);
+}
+
+.weather-card__details p {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 3px 4px;
+}
+
+.weather-card__details span {
+    color: var(--blue-700);
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.weather-card__details strong {
+    color: var(--blue-900);
+    font-size: .88rem;
+}
+
+@media (max-width: 560px) {
+    .sidebar .column { width: 56px; }
+    .input-box { padding: 20px 14px; }
+    .weather-card { padding: 20px; }
 }

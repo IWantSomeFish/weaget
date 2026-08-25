@@ -4,6 +4,8 @@ import {internal} from '../models';
 
 export function GetLocationName():Promise<string>;
 
+export function SaveConfig(arg1:internal.Config):Promise<internal.Config>;
+
 export function UpdateConfig():Promise<internal.Config>;
 
 export function UpdateWeather():Promise<internal.CurrentWeather>;

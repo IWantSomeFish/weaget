@@ -1,7 +1,7 @@
 {
-  "name": "Greater London",
-  "latitude": 51.5,
-  "longitude": -0.12,
+  "name": "New York",
+  "latitude": 40.7,
+  "longitude": -74,
   "speed_unit": "ms",
   "temperature_unit": false
 }

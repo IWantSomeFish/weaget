@@ -18,9 +18,10 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "weaget",
-		Width:  512,
-		Height: 384,
+		Title:     "weaget",
+		Width:     512,
+		Height:    384,
+		Frameless: true,
 
 		MinWidth:  512,
 		MinHeight: 384,

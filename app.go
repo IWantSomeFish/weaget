@@ -62,3 +62,27 @@ func (a *App) UpdateConfig() internal.Config {
 	a.cfg, _ = internal.LoadConfig()
 	return a.cfg
 }
+
+// SaveConfig persists settings supplied by the frontend and applies them to
+// subsequent weather requests.
+func (a *App) SaveConfig(cfg internal.Config) (internal.Config, error) {
+	location, err := internal.GetNameByCords(cfg.Latitude, cfg.Longitude)
+	if err == nil {
+		switch {
+		case location.Address.City != "":
+			cfg.Name = location.Address.City
+		case location.Address.Town != "":
+			cfg.Name = location.Address.Town
+		case location.Address.Village != "":
+			cfg.Name = location.Address.Village
+		case location.Address.State != "":
+			cfg.Name = location.Address.State
+		}
+	}
+
+	if err := internal.SaveConfig(cfg); err != nil {
+		return internal.Config{}, err
+	}
+	a.cfg = cfg
+	return cfg, nil
+}

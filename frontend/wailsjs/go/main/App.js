@@ -6,6 +6,10 @@ export function GetLocationName() {
   return window['go']['main']['App']['GetLocationName']();
 }
 
+export function SaveConfig(arg1) {
+  return window['go']['main']['App']['SaveConfig'](arg1);
+}
+
 export function UpdateConfig() {
   return window['go']['main']['App']['UpdateConfig']();
 }
