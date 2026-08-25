@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"time"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"weaget/internal"
 )
 
@@ -23,6 +25,24 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	a.cfg, _ = internal.LoadConfig()
+
+	go a.weatherLoop()
+}
+
+func (a *App) weatherLoop() {
+	ticker := time.NewTicker(1 * time.Minute)
+
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			a.UpdateWeather()
+
+		case <-a.ctx.Done():
+			return
+		}
+	}
 }
 
 // Updates current weather information and prints it to the console
@@ -42,12 +62,10 @@ func (a *App) UpdateWeather() internal.CurrentWeather {
 	}()
 
 	result := <-ch
-	fmt.Println("Current config:", a.cfg)
-	fmt.Println("Current Weather:", result)
 	wg.Wait()
+	runtime.EventsEmit(a.ctx, "weatherUpdated", result)
 	return result
 }
-
 func (a *App) GetLocationName() string {
 	data, err := internal.GetNameByCords(a.cfg.Latitude, a.cfg.Longitude)
 	if err != nil {

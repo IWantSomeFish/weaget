@@ -6,6 +6,7 @@ import { internal } from '../wailsjs/go/models';
 import { getWeatherIcon } from './helpers/weatherIcon.helper';
 import './helpers/weatherIcons.css';
 import { Quit, WindowMinimise } from '../wailsjs/runtime/runtime';
+import { EventsOn } from "../wailsjs/runtime/runtime";
 
 function App() {
 
@@ -56,7 +57,17 @@ function App() {
         }
         initialize();
     }, []);
-    
+
+    useEffect(() => {
+    const unsubscribe = EventsOn("weatherUpdated", (weather) => {
+        setWeather(weather);
+    });
+
+    return () => {
+        unsubscribe();
+    };
+    }, []);
+
     useEffect(() => {
         if (weather) {
             const icon = getWeatherIcon(weather.weather_code, Boolean(weather.is_day));
